@@ -1,0 +1,16 @@
+{
+  "name": "node_influx",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^4.16.4",
+    "influx": "^5.0.7",
+    "request": "^2.88.0"
+  }
+}
