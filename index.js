@@ -11,9 +11,9 @@ var MZ_sensor_value
 var MZ_last_data
 
 app.get("/", function(req, res){
-    res.send("hello world1")
+    res.send("hello world123")
     })
-    
+
 const influx = new Influx.InfluxDB({
     host: 'localhost',
     database: 'elfTest',
