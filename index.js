@@ -171,7 +171,7 @@ influx.getDatabaseNames()
     })
     .then(() => {
         http.createServer(app).listen(3001, function () {
-            console.log('Listening on port 3001')
+            console.log('Listening on port 3001....')
         })
     })
     .catch(err => {
