@@ -107,7 +107,7 @@ var promise2 = () => {
             //         method: 'POST',
             //         url: 'https://notify-api.line.me/api/notify',
             //         headers: {
-            //             Authorization: 'Bearer ohMIiD5N1vx7mlzlUWwb9EqcMY533cGBI6y8EPxbGOb',
+            //             Authorization: 'Bearer aOQD5n2E2VE69Z5RPtOTdT12IiTnR5IFwX2sJIkUJuG',
             //             'Content-Type': 'application/x-www-form-urlencoded'
             //         },
             //         form: {
@@ -127,7 +127,7 @@ var promise2 = () => {
                     method: 'POST',
                     url: 'https://notify-api.line.me/api/notify',
                     headers: {
-                        Authorization: 'Bearer ohMIiD5N1vx7mlzlUWwb9EqcMY533cGBI6y8EPxbGOb',
+                        Authorization: 'Bearer aOQD5n2E2VE69Z5RPtOTdT12IiTnR5IFwX2sJIkUJuG',
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
                     form: {
