@@ -10,8 +10,8 @@ var MZ_sensor_value
 var MZ_last_data
 
 app.get("/", function (req, res) {
-    res.send("hello world1234")
-    lineNotify("黎明","testing123")
+    res.send("hello world!!")
+    lineNotify("黎明","testing")
 })
 
 //設定influxdb
@@ -38,7 +38,7 @@ var lineNotify = function (place,event){
         method: 'POST',
         url: 'https://notify-api.line.me/api/notify',
         headers: {
-            Authorization: 'Bearer ohMIiD5N1vx7mlzlUWwb9EqcMY533cGBI6y8EPxbGOb',
+            Authorization: 'Bearer aOQD5n2E2VE69Z5RPtOTdT12IiTnR5IFwX2sJIkUJuG',
             'Content-Type': 'application/x-www-form-urlencoded'
         },
         form: {
