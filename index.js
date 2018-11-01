@@ -14,6 +14,7 @@ app.get("/", function (req, res) {
     lineNotify("黎明","testing123")
 })
 
+//設定influxdb
 const influx = new Influx.InfluxDB({
     host: 'localhost',
     database: 'elfTest',
@@ -30,7 +31,8 @@ const influx = new Influx.InfluxDB({
         ]
     }]
 })
-//line 推播function
+
+//line 推播
 var lineNotify = function (place,event){
     var options = {
         method: 'POST',
@@ -49,6 +51,7 @@ var lineNotify = function (place,event){
     });
 }
 
+//定時檢查資料
 var myInt = setInterval(function () {
     var Leeming_sensor = {
         method: 'GET',
