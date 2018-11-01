@@ -1,15 +1,18 @@
 const Influx = require('influx')
-
-
 var request = require("request");
-
+const express = require('express')
+var app = express()
+var request = require("request");
 
 var LM_sensor_value
 var LM_last_data
 var MZ_sensor_value
 var MZ_last_data
 
-
+app.get("/", function (req, res) {
+    res.send("hello world1234")
+    lineNotify("黎明","testing123")
+})
 
 const influx = new Influx.InfluxDB({
     host: 'localhost',
@@ -27,6 +30,24 @@ const influx = new Influx.InfluxDB({
         ]
     }]
 })
+//line 推播function
+var lineNotify = function (place,event){
+    var options = {
+        method: 'POST',
+        url: 'https://notify-api.line.me/api/notify',
+        headers: {
+            Authorization: 'Bearer ohMIiD5N1vx7mlzlUWwb9EqcMY533cGBI6y8EPxbGOb',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        form: {
+            message: "\n" + '地點：' + place + "\n" + "事件: " + event
+        }
+    };
+    request(options, function (error, response, body) {
+        if (error) throw new Error(error);
+        console.log(body);
+    });
+}
 
 var myInt = setInterval(function () {
     var Leeming_sensor = {
@@ -47,21 +68,7 @@ var myInt = setInterval(function () {
                     LM_last_data = LM_sensor_value.time;
                     console.log(LM_last_data)
                 } else {
-                    var options = {
-                        method: 'POST',
-                        url: 'https://notify-api.line.me/api/notify',
-                        headers: {
-                            Authorization: 'Bearer aOQD5n2E2VE69Z5RPtOTdT12IiTnR5IFwX2sJIkUJuG',
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        form: {
-                            message: "\n" + '地點：黎明' + "\n" + "事件: 漏一筆資料"
-                        }
-                    };
-                    request(options, function (error, response, body) {
-                        if (error) throw new Error(error);
-                        console.log(body);
-                    });
+                    lineNotify("黎明","漏一筆資料")
                 }
             });
         });
@@ -69,7 +76,6 @@ var myInt = setInterval(function () {
 
     promise1()
         .then(data => {
-            //console.log('黎明:', sensor_value.value[1]);
             influx.writePoints([{
                 measurement: 'elf',
                 tags: {
@@ -99,42 +105,11 @@ var myInt = setInterval(function () {
                 if (error) throw new Error(error);
                 MZ_sensor_value = JSON.parse(body);
                 resolve(JSON.parse(body));
-                // if (MZ_sensor_value.value[0]<300){
-                //     var options = {
-                //         method: 'POST',
-                //         url: 'https://notify-api.line.me/api/notify',
-                //         headers: {
-                //             Authorization: 'Bearer aOQD5n2E2VE69Z5RPtOTdT12IiTnR5IFwX2sJIkUJuG',
-                //             'Content-Type': 'application/x-www-form-urlencoded'
-                //         },
-                //         form: {
-                //             message: "\n" + '地點：明志' + "\n" + "事件: 資料異常"
-                //         }
-                //     };
-                //     request(options, function (error, response, body) {
-                //         if (error) throw new Error(error);
-                //         console.log(body);
-                //     });
-                // }
                 if (MZ_sensor_value.time != MZ_last_data) {
                     MZ_last_data = MZ_sensor_value.time;
                     console.log(MZ_last_data)
                 } else {
-                    var options = {
-                        method: 'POST',
-                        url: 'https://notify-api.line.me/api/notify',
-                        headers: {
-                            Authorization: 'Bearer aOQD5n2E2VE69Z5RPtOTdT12IiTnR5IFwX2sJIkUJuG',
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        form: {
-                            message: "\n" + '地點：明志' + "\n" + "事件: 漏一筆資料"
-                        }
-                    };
-                    request(options, function (error, response, body) {
-                        if (error) throw new Error(error);
-                        console.log(body);
-                    });
+                    lineNotify("明志","漏一筆資料")
                 }
             });
         });
@@ -142,7 +117,6 @@ var myInt = setInterval(function () {
 
     promise2()
         .then(data => {
-            //console.log('黎明:', sensor_value.value[1]);
             influx.writePoints([{
                 measurement: 'elf',
                 tags: {
@@ -158,4 +132,6 @@ var myInt = setInterval(function () {
         })
 }, 1800000);
 
-
+app.listen(3001, function () {
+    console.log('Listening on port 3001....')
+})
