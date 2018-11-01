@@ -10,8 +10,8 @@ var MZ_sensor_value
 var MZ_last_data
 
 app.get("/", function (req, res) {
-    res.send("hello world1234")
-    lineNotify("黎明","testing123")
+    res.send("hello world!!")
+    lineNotify("黎明","testing")
 })
 
 //設定influxdb
