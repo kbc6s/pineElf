@@ -10,7 +10,7 @@ var MZ_sensor_value
 var MZ_last_data
 
 app.get("/", function (req, res) {
-    res.send("hello world!!!!!")
+    res.send("hello world333!!!!!")
     lineNotify("黎明","testing")
 })
 
