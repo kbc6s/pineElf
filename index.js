@@ -71,7 +71,7 @@ var myInt = setInterval(function () {
                     LM_last_data = LM_sensor_value.time;
                     console.log(LM_last_data)
                 } else {
-                    lineNotify("黎明","漏一筆資料")
+                   // lineNotify("黎明","漏一筆資料")
                 }
             });
         });
