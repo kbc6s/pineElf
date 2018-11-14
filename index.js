@@ -11,7 +11,7 @@ var MZ_last_data
 
 app.get("/", function (req, res) {
     res.send("hello world!!")
-    lineNotify("黎明","testing")
+    //lineNotify("黎明","testing")
 })
 
 //設定influxdb
@@ -38,7 +38,7 @@ var lineNotify = function (place,event){
         method: 'POST',
         url: 'https://notify-api.line.me/api/notify',
         headers: {
-            Authorization: 'Bearer aOQD5n2E2VE69Z5RPtOTdT12IiTnR5IFwX2sJIkUJuG',
+            Authorization: 'Bearer ohMIiD5N1vx7mlzlUWwb9EqcMY533cGBI6y8EPxbGOb',
             'Content-Type': 'application/x-www-form-urlencoded'
         },
         form: {
@@ -112,7 +112,7 @@ var myInt = setInterval(function () {
                     MZ_last_data = MZ_sensor_value.time;
                     console.log(MZ_last_data)
                 } else {
-                    lineNotify("明志","漏一筆資料")
+                    //lineNotify("明志","漏一筆資料")
                 }
             });
         });
