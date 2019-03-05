@@ -21,7 +21,8 @@ var lineNotify = function (place,event){
         console.log(body);
     });
 }
-//定時檢查資料
+
+//keep my azure awake
 
 var myInt = setInterval(function () {
     var Leeming_sensor = {
@@ -35,7 +36,7 @@ var myInt = setInterval(function () {
         if (error) throw new Error(error);
     });
 }, 1200000);                              //3000是每三秒trigger一次
-
+//HWC測試點
 app.get("/openKai", function (req, res) {
     res.send("hello world333!!!!!")
     lineNotify("7697測試中","開！！！！")
