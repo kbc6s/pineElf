@@ -36,11 +36,14 @@ var myInt = setInterval(function () {
     });
 }, 1200000);                              //3000是每三秒trigger一次
 
-app.get("/HWC", function (req, res) {
+app.get("/openKai", function (req, res) {
     res.send("hello world333!!!!!")
-    lineNotify("7697","測試中")
+    lineNotify("7697測試中","開！！！！")
 })
-
+app.get("/closeKai", function (req, res) {
+    res.send("hello world333!!!!!")
+    lineNotify("7697測試中","關")
+})
 app.listen(3001, function () {
     console.log('Listening on port 3001....')
 })
