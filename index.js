@@ -20,7 +20,7 @@ var myInt = setInterval(function () {
     });
 }, 1200000);                              //3000是每三秒trigger一次
 
-app.get("/kai", function (req, res) {
+app.get("/HWC", function (req, res) {
     res.send("hello world333!!!!!")
 })
 
