@@ -11,7 +11,6 @@ var MZ_last_data
 
 app.get("/", function (req, res) {
     res.send("hello world!!")
-    //lineNotify("黎明","testing")
 })
 
 //設定influxdb
