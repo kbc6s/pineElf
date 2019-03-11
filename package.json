@@ -11,6 +11,7 @@
   "dependencies": {
     "express": "^4.16.4",
     "influx": "^5.0.7",
+    "nodemon": "^1.18.10",
     "request": "^2.88.0"
   }
 }
