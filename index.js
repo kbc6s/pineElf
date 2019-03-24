@@ -2,6 +2,7 @@ var request = require("request");
 const express = require('express')
 var app = express()
 var Token = "ohMIiD5N1vx7mlzlUWwb9EqcMY533cGBI6y8EPxbGOb"
+var http = require('http')
 
 //lineNotify function
 var lineNotify = function (place,event){
@@ -37,8 +38,17 @@ var myInt = setInterval(function () {
     });
 }, 1200000);                              //3000是每三秒trigger一次
 //HWC測試點
+// http.createServer(function(request,response){
+//     var message = request;
+//     lineNotify(place)
+// })
+app.get('/',function(req,res){
+    res.send('req');
+    console.log('req')
+})
 app.get("/openKai", function (req, res) {
     res.send("hello world333!!!!!")
+    //console.log(req);
     lineNotify("7697測試中","開！！！！")
 })
 app.get("/closeKai", function (req, res) {
