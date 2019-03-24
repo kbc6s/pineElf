@@ -4,6 +4,29 @@ var app = express()
 var Token = "ohMIiD5N1vx7mlzlUWwb9EqcMY533cGBI6y8EPxbGOb"
 var http = require('http')
 
+//JSON parse method
+var GetInflux = {
+    method: 'GET',
+    url: 'http://kaiwen1995.com:8086/query?db=lineBot;q=select * from lineBot where LineID=\'U8168367ec76c449dbdd98410d9333b8\'',
+    // headers: {
+    //     CK: 'DK4TSU4BPWTWWFW5EC'
+    // }
+};
+app.get("/", function (req, res) {
+    request(GetInflux, function (error, response, body) {
+        if (error) throw new Error(error);
+        // console.log(typeof(body))
+        var kaibuff = JSON.parse(body);
+      
+        var stringResponse = JSON.stringify(kaibuff.results[0].series[0].values[0][0])
+        res.send(kaibuff);
+        
+        console.log(stringResponse);
+        
+    })
+})
+    
+
 //lineNotify function
 var lineNotify = function (place,event){
     var options = {
@@ -55,6 +78,8 @@ app.get("/closeKai", function (req, res) {
     res.send("hello world333!!!!!")
     lineNotify("7697測試中","關")
 })
+
+//app.post()
 app.listen(3001, function () {
     console.log('Listening on port 3001....')
 })
