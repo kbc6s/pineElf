@@ -25,24 +25,24 @@ var http = require('http')
 //     })
 // })
     
-var options = { method: 'POST',
-  url: 'http://192.168.3.69/WaWebService/Json/GetTagValue/Leegood',
-  headers: 
-   { Authorization: 'Basic YWRtaW46bGVlZ29vZA==',
-     'Content-Type': 'application/json' },
-  body: { Tags: [ { Name: 'DO1' } ] },
-  json: true };
+// var options = { method: 'POST',
+//   url: 'http://192.168.3.69/WaWebService/Json/GetTagValue/Leegood',
+//   headers: 
+//    { Authorization: 'Basic YWRtaW46bGVlZ29vZA==',
+//      'Content-Type': 'application/json' },
+//   body: { Tags: [ { Name: 'DO1' } ] },
+//   json: true };
 
-request(options, function (error, response, body) {
-  if (error) throw new Error(error);
+// request(options, function (error, response, body) {
+//   if (error) throw new Error(error);
 
-  //console.log(body);
-  //var qqq = JSON.parse(body);
-  var qqq = body;
-   console.log(qqq.Values[0].Value);
+//   //console.log(body);
+//   //var qqq = JSON.parse(body);
+//   var qqq = body;
+//    console.log(qqq.Values[0].Value);
 
-  var int = 1;
-});
+//   var int = 1;
+// });
 //lineNotify function
 var lineNotify = function (place,event){
     var options = {
@@ -64,34 +64,34 @@ var lineNotify = function (place,event){
 
 //keep my azure awake
 
-var myInt = setInterval(function () {
-    var Leeming_sensor = {
-        method: 'GET',
-        url: 'https://kaiwen.azurewebsites.net/',
-        // headers: {
-        //     CK: 'DK4TSU4BPWTWWFW5EC'
-        // }
-    };
-    request(Leeming_sensor, function (error, response, body) {
-        if (error) throw new Error(error);
-    });
-}, 1200000);                              //3000是每三秒trigger一次
+// var myInt = setInterval(function () {
+//     var Leeming_sensor = {
+//         method: 'GET',
+//         url: 'https://kaiwen.azurewebsites.net/',
+//         // headers: {
+//         //     CK: 'DK4TSU4BPWTWWFW5EC'
+//         // }
+//     };
+//     request(Leeming_sensor, function (error, response, body) {
+//         if (error) throw new Error(error);
+//     });
+// }, 1200000);                              //3000是每三秒trigger一次
 //HWC測試點
 // http.createServer(function(request,response){
 //     var message = request;
 //     lineNotify(place)
 // })
 app.get('/',function(req,res){
-    res.send('req');
-    console.log('req')
+    res.send('hello');
+    console.log('hello')
 })
 app.get("/openKai", function (req, res) {
-    res.send("hello world333!!!!!")
+    res.send("hello world!!!!!")
     //console.log(req);
     lineNotify("7697測試中","開！！！！")
 })
 app.get("/closeKai", function (req, res) {
-    res.send("hello world333!!!!!")
+    res.send("hello world!!!!!")
     lineNotify("7697測試中","關")
 })
 
