@@ -5,6 +5,8 @@ var app = express()
 var Token = "ohMIiD5N1vx7mlzlUWwb9EqcMY533cGBI6y8EPxbGOb"
 var http = require('http')
 
+var waterTower
+var waterTower_last_data
 //JSON parse method
 // var GetInflux = {
 //     method: 'GET',
@@ -15,16 +17,16 @@ var http = require('http')
 //         if (error) throw new Error(error);
 //         // console.log(typeof(body))
 //         var kaibuff = JSON.parse(body);
-      
+
 //          var stringResponse = JSON.stringify(kaibuff.results[0].series[0].values[0][3])
 //         // var stringResponse = JSON.stringify(kaibuff.results[0])
 //         res.send(kaibuff);
-        
+
 //         console.log(stringResponse);
-        
+
 //     })
 // })
-    
+//          ==============Leegood Parse webAccess==================    
 // var options = { method: 'POST',
 //   url: 'http://192.168.3.69/WaWebService/Json/GetTagValue/Leegood',
 //   headers: 
@@ -43,8 +45,34 @@ var http = require('http')
 
 //   var int = 1;
 // });
+var myInt = setInterval(function () {
+    var waterTower_value = {
+        method: 'GET',
+        url: 'https://iot.cht.com.tw/iot/v1/device/7608441860/sensor/elf1/rawdata',
+        headers: {
+            CK: 'DK4TSU4BPWTWWFW5EC'
+        }
+    };
+
+    var position;
+    request(waterTower_value, function (error, response, body) {
+        if (error) throw new Error(error);
+        waterTower = JSON.parse(body);
+        position = waterTower.value[0];
+        if (position > 1000) {
+            lineNotify("水塔水位", "低線警報！！！")
+        }
+        if (waterTower.time != waterTower_last_data) {
+            waterTower_last_data = waterTower.time;
+            //console.log(LM_last_data)
+        } else {
+            lineNotify("7697", "當機了！！")
+        }
+    })
+}, 3000);
+
 //lineNotify function
-var lineNotify = function (place,event){
+var lineNotify = function (place, event) {
     var options = {
         method: 'POST',
         url: 'https://notify-api.line.me/api/notify',
@@ -62,37 +90,35 @@ var lineNotify = function (place,event){
     });
 }
 
-//keep my azure awake
 
-// var myInt = setInterval(function () {
-//     var Leeming_sensor = {
-//         method: 'GET',
-//         url: 'https://kaiwen.azurewebsites.net/',
-//         // headers: {
-//         //     CK: 'DK4TSU4BPWTWWFW5EC'
-//         // }
-//     };
-//     request(Leeming_sensor, function (error, response, body) {
-//         if (error) throw new Error(error);
-//     });
-// }, 1200000);                              //3000是每三秒trigger一次
-//HWC測試點
-// http.createServer(function(request,response){
-//     var message = request;
-//     lineNotify(place)
-// })
-app.get('/',function(req,res){
-    res.send('hello');
-    console.log('hello')
+app.get('/', function (req, res) {
+    var Body;
+    var waterTower = {
+        method: 'GET',
+        url: 'https://iot.cht.com.tw/iot/v1/device/7608441860/sensor/elf1/rawdata',
+        headers: {
+            CK: 'DK4TSU4BPWTWWFW5EC'
+        }
+    };
+    request(waterTower, function (error, response, body) {
+        if (error) throw new Error(error);
+        LM_sensor_value = JSON.parse(body);
+        Body = LM_sensor_value.value[0];
+        if (Body > 1000) {
+            lineNotify("水塔水位", "測試")
+        }
+        // console.log(Body);
+        // resolve(JSON.parse(body));
+    })
 })
 app.get("/openKai", function (req, res) {
     res.send("hello world!!!!!")
     //console.log(req);
-    lineNotify("7697測試中","開！！！！")
+    lineNotify("7697測試中", "開！！！！")
 })
 app.get("/closeKai", function (req, res) {
     res.send("hello world!!!!!")
-    lineNotify("7697測試中","關")
+    lineNotify("7697測試中", "關")
 })
 
 //app.post()
