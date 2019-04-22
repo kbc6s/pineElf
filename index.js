@@ -1,179 +1,111 @@
-const Influx = require('influx')
-const express = require('express')
-const http = require('http')
-const os = require('os')
+//water Tower
 var request = require("request");
+const express = require('express')
 var app = express()
+var Token = "ohMIiD5N1vx7mlzlUWwb9EqcMY533cGBI6y8EPxbGOb"
+var http = require('http')
 
-var LM_sensor_value
-var LM_last_data
-var MZ_sensor_value
-var MZ_last_data
+var waterTower
+var waterTower_last_data
+//JSON parse method
+// var GetInflux = {
+//     method: 'GET',
+//     url: 'http://kaiwen1995.com:8086/query?db=lineBot;q=select * from lineBot where LineID=\'U8168367ec76c449dbdd98410d9333b8\'',
+// };
+// app.get("/", function (req, res) {
+//     request(GetInflux, function (error, response, body) {
+//         if (error) throw new Error(error);
+//         // console.log(typeof(body))
+//         var kaibuff = JSON.parse(body);
 
-app.get("/", function(req, res){
-    res.send("hello world12345")
-    })
+//          var stringResponse = JSON.stringify(kaibuff.results[0].series[0].values[0][3])
+//         // var stringResponse = JSON.stringify(kaibuff.results[0])
+//         res.send(kaibuff);
 
-const influx = new Influx.InfluxDB({
-    host: 'localhost',
-    database: 'elfTest',
-    schema: [{
-        measurement: 'elf',
-        fields: {
-            HP: Influx.FieldType.INTEGER,
-            SM: Influx.FieldType.INTEGER,
-            T: Influx.FieldType.FLOAT,
-            H: Influx.FieldType.FLOAT,
-        },
-        tags: [
-            'place'
-        ]
-    }]
-})
+//         console.log(stringResponse);
 
+//     })
+// })
+//          ==============Leegood Parse webAccess==================    
+// var options = { method: 'POST',
+//   url: 'http://192.168.3.69/WaWebService/Json/GetTagValue/Leegood',
+//   headers: 
+//    { Authorization: 'Basic YWRtaW46bGVlZ29vZA==',
+//      'Content-Type': 'application/json' },
+//   body: { Tags: [ { Name: 'DO1' } ] },
+//   json: true };
+
+// request(options, function (error, response, body) {
+//   if (error) throw new Error(error);
+
+//   //console.log(body);
+//   //var qqq = JSON.parse(body);
+//   var qqq = body;
+//    console.log(qqq.Values[0].Value);
+
+//   var int = 1;
+// });
 var myInt = setInterval(function () {
-var Leeming_sensor = {
-    method: 'GET',
-    url: 'https://iot.cht.com.tw/iot/v1/device/7608441860/sensor/elf1/rawdata',
-    headers: {
-        CK: 'DK4TSU4BPWTWWFW5EC'
-    }
-};
-var promise1 = () => {
-    return new Promise(function (resolve, reject) {
-        request(Leeming_sensor, function (error, response, body) {
-            if (error) throw new Error(error);
-            LM_sensor_value = JSON.parse(body);
-            resolve(JSON.parse(body));
-            
-            if (LM_sensor_value.time != LM_last_data) {
-                LM_last_data = LM_sensor_value.time;
-                console.log(LM_last_data)
-            } else {
-                var options = {
-                    method: 'POST',
-                    url: 'https://notify-api.line.me/api/notify',
-                    headers: {
-                        Authorization: 'Bearer aOQD5n2E2VE69Z5RPtOTdT12IiTnR5IFwX2sJIkUJuG',
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    form: {
-                        message: "\n" + '地點：黎明' + "\n" + "事件: 漏一筆資料"
-                    }
-                };
-                request(options, function (error, response, body) {
-                    if (error) throw new Error(error);
-                    console.log(body);
-                });
-            }
-        });
-    });
-}
-
-promise1()
-.then(data => {
-    //console.log('黎明:', sensor_value.value[1]);
-    influx.writePoints([{
-        measurement: 'elf',
-        tags: {
-            place: "Leeming"
-        },
-        fields: {
-            HP:LM_sensor_value.value[0],
-            SM:LM_sensor_value.value[1],
-            T:LM_sensor_value.value[2],
-            H:LM_sensor_value.value[3]
+    var waterTower_value = {
+        method: 'GET',
+        url: 'https://iot.cht.com.tw/iot/v1/device/7608441860/sensor/elf1/rawdata',
+        headers: {
+            CK: 'DK4TSU4BPWTWWFW5EC'
         }
-    }])
+    };
 
-})
-
-//MZ
-var Mingchi_sensor = {
-    method: 'GET',
-    url: 'https://iot.cht.com.tw/iot/v1/device/7608441860/sensor/elf2/rawdata',
-    headers: {
-        CK: 'DK4TSU4BPWTWWFW5EC'
-    }
-};
-var promise2 = () => {
-    return new Promise(function (resolve, reject) {
-        request(Mingchi_sensor, function (error, response, body) {
-            if (error) throw new Error(error);
-            MZ_sensor_value = JSON.parse(body);
-            resolve(JSON.parse(body));
-            // if (MZ_sensor_value.value[0]<300){
-            //     var options = {
-            //         method: 'POST',
-            //         url: 'https://notify-api.line.me/api/notify',
-            //         headers: {
-            //             Authorization: 'Bearer aOQD5n2E2VE69Z5RPtOTdT12IiTnR5IFwX2sJIkUJuG',
-            //             'Content-Type': 'application/x-www-form-urlencoded'
-            //         },
-            //         form: {
-            //             message: "\n" + '地點：明志' + "\n" + "事件: 資料異常"
-            //         }
-            //     };
-            //     request(options, function (error, response, body) {
-            //         if (error) throw new Error(error);
-            //         console.log(body);
-            //     });
-            // }
-            if (MZ_sensor_value.time != MZ_last_data) {
-                MZ_last_data = MZ_sensor_value.time;
-                console.log(MZ_last_data)
-            } else {
-                var options = {
-                    method: 'POST',
-                    url: 'https://notify-api.line.me/api/notify',
-                    headers: {
-                        Authorization: 'Bearer aOQD5n2E2VE69Z5RPtOTdT12IiTnR5IFwX2sJIkUJuG',
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    form: {
-                        message: "\n" + '地點：明志' + "\n" + "事件: 漏一筆資料"
-                    }
-                };
-                request(options, function (error, response, body) {
-                    if (error) throw new Error(error);
-                    console.log(body);
-                });
-            }
-        });
-    });
-}
-
-promise2()
-.then(data => {
-    //console.log('黎明:', sensor_value.value[1]);
-    influx.writePoints([{
-        measurement: 'elf',
-        tags: {
-            place: "Mingchi"
-        },
-        fields: {
-            HP:MZ_sensor_value.value[0],
-            SM:MZ_sensor_value.value[1],
-            T:MZ_sensor_value.value[2],
-            H:MZ_sensor_value.value[3]
+    var position;
+    request(waterTower_value, function (error, response, body) {
+        if (error) throw new Error(error);
+        waterTower = JSON.parse(body);
+        position = waterTower.value[0];
+        if (position > 1000) {
+            lineNotify("水塔水位", "低線警報！！！")
         }
-    }])
-
-})
+        if (waterTower.time != waterTower_last_data) {
+            waterTower_last_data = waterTower.time;
+            //console.log(LM_last_data)
+        } else {
+            lineNotify("7697", "當機了！！")
+        }
+    })
 }, 1800000);
 
-
-influx.getDatabaseNames()
-    .then(names => {
-        if (!names.includes('elfTest')) {
-            return influx.createDatabase('elfTest')
+//lineNotify function
+var lineNotify = function (place, event) {
+    var options = {
+        method: 'POST',
+        url: 'https://notify-api.line.me/api/notify',
+        headers: {
+            Authorization: `Bearer ${Token}`,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        form: {
+            message: "\n" + '地點：' + place + "\n" + "事件: " + event
         }
-    })
-    .then(() => {
-        http.createServer(app).listen(3001, function () {
-            console.log('Listening on port 3001....')
-        })
-    })
-    .catch(err => {
-        console.error(`Error creating Influx database!`)
-    })
+    };
+    request(options, function (error, response, body) {
+        if (error) throw new Error(error);
+        console.log(body);
+    });
+}
+
+
+app.get('/', function (req, res) {
+    lineNotify("7697測試中", "開！！！！");
+    res.send("hello world!!!!!")
+})
+app.get("/openKai", function (req, res) {
+    res.send("hello world!!!!!")
+    //console.log(req);
+    lineNotify("7697測試中", "開！！！！")
+})
+app.get("/closeKai", function (req, res) {
+    res.send("hello world!!!!!")
+    lineNotify("7697測試中", "關")
+})
+
+//app.post()
+app.listen(3001, function () {
+    console.log('Listening on port 3001....')
+})
