@@ -92,24 +92,8 @@ var lineNotify = function (place, event) {
 
 
 app.get('/', function (req, res) {
-    var Body;
-    var waterTower = {
-        method: 'GET',
-        url: 'https://iot.cht.com.tw/iot/v1/device/7608441860/sensor/elf1/rawdata',
-        headers: {
-            CK: 'DK4TSU4BPWTWWFW5EC'
-        }
-    };
-    request(waterTower, function (error, response, body) {
-        if (error) throw new Error(error);
-        LM_sensor_value = JSON.parse(body);
-        Body = LM_sensor_value.value[0];
-        if (Body > 1000) {
-            lineNotify("水塔水位", "測試")
-        }
-        // console.log(Body);
-        // resolve(JSON.parse(body));
-    })
+    lineNotify("水塔水位", "測試")
+    res.send("hello world!!!!!")
 })
 app.get("/openKai", function (req, res) {
     res.send("hello world!!!!!")
