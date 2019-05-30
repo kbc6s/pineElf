@@ -3,10 +3,15 @@ var request = require("request");
 const express = require('express')
 var app = express()
 var Token = "zOiTMF4ao65xlyLmztina81RmKsH2KZjPuv2vtvbpDN"
+// var Token = "ohMIiD5N1vx7mlzlUWwb9EqcMY533cGBI6y8EPxbGOb"
 var http = require('http')
 
 var waterTower
 var waterTower_last_data
+var selectElf = 1     //選擇NB-iot模組
+var controllElf = true //控制推撥開關
+
+
 //JSON parse method
 // var GetInflux = {
 //     method: 'GET',
@@ -48,7 +53,7 @@ var waterTower_last_data
 var myInt = setInterval(function () {
     var waterTower_value = {
         method: 'GET',
-        url: 'https://iot.cht.com.tw/iot/v1/device/7608441860/sensor/elf1/rawdata',
+        url: 'https://iot.cht.com.tw/iot/v1/device/7608441860/sensor/elf'+ selectElf +'/rawdata',
         headers: {
             CK: 'DK4TSU4BPWTWWFW5EC'
         }
@@ -59,17 +64,17 @@ var myInt = setInterval(function () {
         if (error) throw new Error(error);
         waterTower = JSON.parse(body);
         position = waterTower.value[0];
-        if (position > 1000) {
+        if (position > 1000 && controllElf) {
             lineNotify("水塔水位", "低線警報！！！")
         }
         if (waterTower.time != waterTower_last_data) {
             waterTower_last_data = waterTower.time;
             //console.log(LM_last_data)
-        } else {
+        } else if(controllElf){
             lineNotify("7697", "當機了！！")
         }
     })
-}, 1800000);
+}, 1800);
 
 //lineNotify function
 var lineNotify = function (place, event) {
@@ -78,7 +83,8 @@ var lineNotify = function (place, event) {
         url: 'https://notify-api.line.me/api/notify',
         headers: {
             Authorization: `Bearer ${Token}`,
-            'Content-Type': 'application/x-www-form-urlencoded'
+            // 'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'raw'
         },
         form: {
             message: "\n" + '地點：' + place + "\n" + "事件: " + event
@@ -90,21 +96,30 @@ var lineNotify = function (place, event) {
     });
 }
 
-
-app.get('/', function (req, res) {
-    lineNotify("水塔水位", "測試")
-    res.send("hello world!!!!!")
-})
-app.get("/openKai", function (req, res) {
-    res.send("hello world!!!!!")
+app.get("/check", function (req, res) {
+    res.send("message send")
     //console.log(req);
-    lineNotify("7697測試中", "開！！！！")
+    if(controllElf){
+    lineNotify("7697", "測試")
+    }
 })
-app.get("/closeKai", function (req, res) {
-    res.send("hello world!!!!!")
-    lineNotify("7697測試中", "關")
+app.get("/startElf", function (req, res) {
+    res.send("已開啟")
+    //console.log(req);
+    lineNotify("7697", "開始監控\n 點擊連結關閉\n http://18.214.142.82:3001/startElf")
+    controllElf = true
 })
-
+app.get("/stopElf", function (req, res) {
+    res.send("已關閉")
+    lineNotify("7697", "已暫停\n點擊連結開啟功能 \n http://18.214.142.82:3001/startElf")
+    controllElf = false
+})
+app.get("/elf2", function(req, res){
+    selectElf = 2
+})
+app.get("/elf1", function(req, res){
+    selectElf = 1
+})
 //app.post()
 app.listen(3001, function () {
     console.log('Listening on port 3001....')
