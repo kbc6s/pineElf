@@ -74,7 +74,7 @@ var myInt = setInterval(function () {
             lineNotify("7697", "當機了！！")
         }
     })
-}, 1800);
+}, 180000);
 
 //lineNotify function
 var lineNotify = function (place, event) {
