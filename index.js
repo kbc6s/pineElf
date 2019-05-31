@@ -106,7 +106,7 @@ app.get("/check", function (req, res) {
 app.get("/startElf", function (req, res) {
     res.send("已開啟")
     //console.log(req);
-    lineNotify("7697", "開始監控\n 點擊連結關閉\n http://18.214.142.82:3001/startElf")
+    lineNotify("7697", "開始監控\n 點擊連結關閉\n http://18.214.142.82:3001/stopElf")
     controllElf = true
 })
 app.get("/stopElf", function (req, res) {
