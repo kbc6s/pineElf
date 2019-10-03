@@ -3,6 +3,7 @@ var request = require("request");
 const express = require('express')
 var app = express()
 var Token = "dDzOGwQdOB35Oru3VnaWJ3ssEJQFz9gfxtrWMbdNBmf"
+// var Token = "ohMIiD5N1vx7mlzlUWwb9EqcMY533cGBI6y8EPxbGOb"
 var http = require('http')
 
 var waterTower
@@ -34,13 +35,13 @@ app.get("/closeKai", function (req, res) {
     res.send("message send")
     //console.log(req);
     if(controllElf){
-    lineNotify("7697", "開門")
+    lineNotify("地下室", "開門!!!!!!!??????")
     }
 })
 app.get("/openKai", function (req, res) {
     res.send("已開啟")
     //console.log(req);
-    lineNotify("7697", "關門")
+    lineNotify("地下室", "關門")
     controllElf = true
 })
 // app.get("/stopElf", function (req, res) {
